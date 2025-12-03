@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Feedback e Login</title>
+    <style>
+        /* Variáveis de Cor (para um design moderno) */
+        :root {
+            --primary-color: #4285F4; /* Azul Google */
+            --secondary-color: #34A853; /* Verde */
+            --background-color: #F8F9FA; /* Cinza Claro */
+            --card-background: #FFFFFF;
+            --text-color: #3C4043;
+            --shadow-light: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+
+        /* Estilos Globais */
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        /* Containers de Layout */
+        .feedback-container {
+            background-color: var(--card-background);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-light);
+            max-width: 450px;
+            width: 100%;
+            margin-top: 15px;
+        }
+        .toggle-container {
+            max-width: 450px;
+            width: 100%;
+            text-align: right;
+        }
+
+        /* --- Botão de Acesso (Discreto) --- */
+        .acesso-btn {
+            background: none;
+            color: #888;
+            border: none;
+            padding: 5px 0;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            font-weight: 400;
+            transition: color 0.3s;
+            display: inline-block;
+        }
+        .acesso-btn:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        /* --- Div de Login (Escondida por Padrão) --- */
+        .login-div {
+            background-color: var(--card-background);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-light);
+            max-width: 450px;
+            width: 100%;
+            margin-top: 10px;
+            display: none; /* ESCONDIDA POR JS */
+            border-left: 5px solid var(--primary-color);
+        }
+        .login-div h2 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+       
+        /* Estilos de Campos e Botões */
+        label { display: block; margin-top: 15px; margin-bottom: 5px; font-weight: 500; font-size: 14px; }
+        input[type="text"], input[type="email"], input[type="password"], textarea {
+            width: 100%; padding: 10px; border: 1px solid #DADCE0; border-radius: 4px; box-sizing: border-box; font-size: 15px; margin-bottom: 15px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input:focus, textarea:focus { border-color: var(--primary-color); box-shadow: 0 0 0 1px var(--primary-color); outline: none; }
+        textarea { resize: vertical; height: 100px; }
+        .feedback-container button[type="submit"] {
+            background-color: var(--secondary-color); color: white; padding: 12px 20px; margin-top: 25px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: 500; width: 100%; transition: background-color 0.3s;
+        }
+        .feedback-container button[type="submit"]:hover { background-color: #318f4a; }
+        .login-div button[type="submit"] {
+            background-color: var(--primary-color); color: white; padding: 10px; border: none; border-radius: 4px; cursor: pointer; margin-top: 5px; width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toggle-container">
+        <a href="#" class="acesso-btn" onclick="toggleLogin(event)">Área Administrativa</a>
+
+        <div class="login-div" id="loginPanel">
+            <h2>🔒 Acesso Restrito</h2>
+           
+            <form action="painel_admin.php" method="POST">
+                <label for="login-user">Usuário:</label>
+                <input type="text" id="login-user" name="usuario" required>
+               
+                <label for="login-pass">Senha:</label>
+                <input type="password" id="login-pass" name="senha" required>
+               
+                <button type="submit">Fazer Login</button>
+            </form>
+            <p style="text-align: center; margin-top: 10px; font-size: 12px; color: #777;">
+                *Login de Exemplo: user01 / 1234
+            </p>
+        </div>
+    </div>
+   
+    <div class="feedback-container">
+        <h1>👋 Seu Feedback é Importante</h1>
+       
+        <form action="#" method="POST">
+            <label for="nome">Seu Nome (Opcional):</label>
+            <input type="text" id="nome" name="nome" placeholder="Seu nome">
+           
+            <label for="email">Seu E-mail (Obrigatório):</label>
+            <input type="email" id="email" name="email" placeholder="seu.email@exemplo.com" required>
+
+            <label for="assunto">Assunto:</label>
+            <input type="text" id="assunto" name="assunto" placeholder="Sugestão, Problema, Elogio" required>
+
+            <label for="feedback">Seu Feedback (Obrigatório):</label>
+            <textarea id="feedback" name="feedback" placeholder="Descreva seu comentário aqui..." required></textarea>
+           
+            <button type="submit">Enviar Feedback</button>
+        </form>
+    </div>
+
+    <script>
+        function toggleLogin(event) {
+            // Previne o comportamento padrão do link (ir para o topo da página)
+            event.preventDefault();
+           
+            var loginDiv = document.getElementById('loginPanel');
+           
+            // Alterna o display entre 'block' (visível) e 'none' (escondido)
+            if (loginDiv.style.display === 'block') {
+                loginDiv.style.display = 'none';
+            } else {
+                loginDiv.style.display = 'block';
+            }
+        }
+    </script>
+
+</body>
+</html>
